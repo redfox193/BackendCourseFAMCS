@@ -1,0 +1,10 @@
+fastapi>=0.100
+uvicorn[standard]>=0.22
+pytest>=7.0
+pytest-asyncio>=0.21
+httpx>=0.24
+asgiref>=3.8
+pydantic>=2.0
+psycopg2-binary>=2.9
+respx
+yandex-taxi-testsuite>=0.4.2
