@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSE Price Feed</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 2rem;
+        }
+
+        h1 { color: #569cd6; margin-bottom: 0.5rem; }
+
+        #status {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        #status.connected { color: #4ec9b0; }
+        #status.disconnected { color: #f44747; }
+
+        #price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ce9178;
+            margin: 1rem 0;
+        }
+
+        #log {
+            margin-top: 2rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #3c3c3c;
+            padding: 0.75rem;
+            border-radius: 4px;
+        }
+
+        .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #2d2d2d;
+            font-size: 0.85rem;
+        }
+
+        .log-entry span.id   { color: #569cd6; }
+        .log-entry span.time { color: #808080; }
+        .log-entry span.val  { color: #b5cea8; }
+    </style>
+</head>
+<body>
+    <h1>📈 Live Price Feed</h1>
+    <div id="status" class="disconnected">⚫ Disconnected</div>
+    <div id="price">—</div>
+    <div id="log"></div>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const priceEl  = document.getElementById('price');
+        const logEl    = document.getElementById('log');
+
+        function connect() {
+            const es = new EventSource('http://127.0.0.1:8000/events');
+
+            es.addEventListener('open', () => {
+                statusEl.textContent = '🟢 Connected';
+                statusEl.className = 'connected';
+            });
+
+            // Listen to named event "price" — matches `event: price` in SSE stream
+            es.addEventListener('price', (e) => {
+                const { usd } = JSON.parse(e.data);
+                const time = new Date().toLocaleTimeString();
+
+                priceEl.textContent = `$${usd.toFixed(2)}`;
+
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `
+                    <span class="time">${time}</span>
+                    <span class="id"> [id=${e.lastEventId}]</span>
+                    <span class="val"> $${usd.toFixed(2)}</span>
+                `;
+                logEl.prepend(entry);   // newest on top
+            });
+
+            es.addEventListener('error', () => {
+                statusEl.textContent = '⚫ Disconnected — reconnecting...';
+                statusEl.className = 'disconnected';
+            });
+        }
+
+        connect();
+    </script>
+</body>
+</html>
