@@ -4,4 +4,5 @@
 
 `practice_1` - тестирование, работа с pytest <br>
 `practice_2` - Docker <br>
-`practice_3` - HTTP/REST
+`practice_3` - HTTP/REST<br>
+`practice_4` - Polling/SSE/Webhook/WebSocket <br>
