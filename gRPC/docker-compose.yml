@@ -1,0 +1,22 @@
+services:
+  transport_service:
+    build:
+      context: ./transport_service
+    volumes:
+      - ./transport_service/app:/app
+    environment:
+      GRPC_PORT: 50051
+      STREAM_INTERVAL_SECONDS: 1.0
+
+  maps_service:
+    build:
+      context: ./maps_service
+    volumes:
+      - ./maps_service/app:/app
+    depends_on:
+      - transport_service
+    environment:
+      TRANSPORT_GRPC_TARGET: transport_service:50051
+      GRPC_UNARY_TIMEOUT_SECONDS: 1
+    ports:
+      - "8000:8000"

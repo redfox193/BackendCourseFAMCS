@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+grpcio
+grpcio-tools
+protobuf
+jinja2

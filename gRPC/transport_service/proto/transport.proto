@@ -1,0 +1,85 @@
+//python3 -m grpc_tools.protoc \
+//  -I./proto \
+//  --python_out=./app \
+//  --grpc_python_out=./app \
+//  ./proto/transport.proto
+
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+service TransportService {
+  rpc GetStops(google.protobuf.Empty) returns (GetStopsResponse);
+  rpc GetStopRoutes(StopRequest) returns (GetStopRoutesResponse);
+  rpc GetRouteDetails(RouteRequest) returns (GetRouteDetailsResponse);
+  rpc StreamVehiclePositions(VehicleStreamRequest) returns (stream VehiclePosition);
+}
+
+enum RouteKind {
+  ROUTE_KIND_UNSPECIFIED = 0;
+  BUS = 1;
+  TROLLEYBUS = 2;
+}
+
+message Stop {
+  string id = 1;
+  string name = 2;
+  double lat = 3;
+  double lon = 4;
+}
+
+message Route {
+  string id = 1;
+  string number = 2;
+  RouteKind kind = 3;
+  string display_name = 4;
+}
+
+message ScheduleEntry {
+  string stop_id = 1;
+  string arrival_hhmm = 2;
+  string destination = 3;
+}
+
+message RouteGeometrySegment {
+  int32 seq = 1;
+  double start_lat = 2;
+  double start_lon = 3;
+  double end_lat = 4;
+  double end_lon = 5;
+}
+
+message VehiclePosition {
+  string vehicle_id = 1;
+  string route_id = 2;
+  double lat = 3;
+  double lon = 4;
+  double bearing_deg = 5;
+  int64 timestamp_unix = 6;
+}
+
+message StopRequest {
+  string stop_id = 1;
+}
+
+message RouteRequest {
+  string route_id = 1;
+}
+
+message VehicleStreamRequest {
+  string route_id = 1;
+}
+
+message GetStopsResponse {
+  repeated Stop stops = 1;
+}
+
+message GetStopRoutesResponse {
+  repeated Route routes = 1;
+}
+
+message GetRouteDetailsResponse {
+  Route route = 1;
+  repeated ScheduleEntry schedule = 2;
+  repeated RouteGeometrySegment geometry = 3;
+}
