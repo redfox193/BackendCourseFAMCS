@@ -1,0 +1,21 @@
+services:
+  transport_service:
+    build:
+      context: ./transport_service
+    volumes:
+      - ./transport_service/app:/app
+    ports:
+      - "8001:8001"
+
+  maps_service:
+    build:
+      context: ./maps_service
+    volumes:
+      - ./maps_service/app:/app
+    depends_on:
+      - transport_service
+    environment:
+      TRANSPORT_GRAPHQL_HTTP: http://transport_service:8001/graphql
+      TRANSPORT_GRAPHQL_WS: ws://transport_service:8001/graphql
+    ports:
+      - "8000:8000"
