@@ -6,4 +6,4 @@
 `practice_2` - Docker <br>
 `practice_3` - HTTP/REST<br>
 `practice_4` - Polling/SSE/Webhook/WebSocket <br>
-`practice_5` - gRPC <br>
+`practice_5` - gRPC & GraphQL <br>
