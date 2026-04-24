@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: threads
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d threads"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  migrations:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/threads
+    command: ["alembic", "upgrade", "head"]
+    restart: "no"
+
+  app:
+    build: .
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    environment:
+      APP_NAME: Threads Demo App
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/threads
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:

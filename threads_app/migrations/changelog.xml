@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+      http://www.liquibase.org/xml/ns/dbchangelog
+      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.23.xsd">
+
+    <changeSet id="001-create-users-table" author="threads-app">
+        <sqlFile
+            path="sql/001_create_users.sql"
+            relativeToChangelogFile="true"
+            splitStatements="true"
+            endDelimiter=";"/>
+    </changeSet>
+
+    <changeSet id="002-create-posts-table" author="threads-app">
+        <sqlFile
+            path="sql/002_create_posts.sql"
+            relativeToChangelogFile="true"
+            splitStatements="true"
+            endDelimiter=";"/>
+    </changeSet>
+
+</databaseChangeLog>
