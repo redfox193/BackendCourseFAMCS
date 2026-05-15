@@ -8,3 +8,4 @@
 `practice_4` - Polling/SSE/Webhook/WebSocket <br>
 `practice_5` - gRPC & GraphQL <br>
 `practice_7` - dd: migrations <br>
+`practice_10` - redis streams <br>
