@@ -9,3 +9,4 @@
 `practice_5` - gRPC & GraphQL <br>
 `practice_7` - dd: migrations <br>
 `practice_10` - redis streams <br>
+`practice_11` - RabbitMQ <br>
